@@ -9,6 +9,7 @@ h1 {
   margin: 3em 0;
   font-size: 20px;
   font-weight: 400;
+  line-height: 1.8em;
   text-align: center;
 }
 
@@ -48,14 +49,19 @@ h1 strong {
   height: 60px;
   margin: 0;
   padding-top: 0.5em;
-  padding-left: 5em;
-  padding-right: 5em;
   border: none;
   border-radius: 0;
   font-size: 1.2em;
   text-transform: none;
   color: white;
   background-color: #ef2229;
+}
+
+@media (min-width: 550px) {
+  .banner .button-cta {
+    padding-left: 5em;
+    padding-right: 5em;
+  }
 }
 
 .payment-notice {
@@ -67,21 +73,33 @@ h1 strong {
 
 pre {
   display: flex;
-  padding-left: 3em;
-  padding-top: 1em;
-  padding-bottom: 1.5em;
+  background-color: #263238;
+  padding: 0.1em 1em 1.3em 1em;
 }
 
-pre, code {
-  font-size: 16px;
-  line-height: 1.3em;
-  color: #f8ffff;
-  background-color: #263238;
+@media (min-width: 550px) {
+  pre {
+    padding: 1em 3em 1.5em 3em;
+  }
 }
 
 pre > code {
+  color: #f8ffff;
+  overflow: auto;
+  word-break: break-all;
+  hyphens: none;
+
+  background-color: transparent;
   border: none;
   padding: 0;
+  scrollbar-width: none;
+}
+
+@media (min-width: 550px) {
+  pre > code {
+    font-size: 16px;
+    line-height: 1.3em;
+  }
 }
 
 span.code-class { color: #fcd06e; }
