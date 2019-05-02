@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
     <link rel="stylesheet" href="style.css">
 
+    <script type="text/javascript" src="https://js.stripe.com/v3" async></script>
+
     <title>Solid Ruby Design Newsletter</title>
     <meta name="description" content="A newsletter to learn practical patterns to tame complexities in your Ruby code.">
 
@@ -64,12 +66,51 @@
               </code>
             </pre>
             <div class="cta-container">
-              <a class="button button-cta" href="#">Get access now! 🚀</a>
+              <button id="checkout-button" class="button button-cta" role="link">Get access now! 🚀</button>
             </div>
           </div>
-          <p class="payment-notice">One-shot payment of 50€</p>
+          <div class="payment-container">
+            <p id="payment-error-message"><!-- Filled by Stripe Checkout script --></p>
+            <p class="payment-notice">One-shot payment of 50€</p>
+          </div>
         </div>
       </div>
     </div>
+
+    <script>
+      var settings = {
+        test: {
+          stripeKey:   'pk_test_AQChgkHVYwyEZ7tQ6USRMMn700qcDhF3kr',
+          productSKU:  'sku_EzjGIEQvq3lPMM',
+          redirectURL: window.location.origin
+        },
+        live: {
+          stripeKey:   'pk_live_LX30bNQfyM7kr7Mndz2AKIYv00RvtzsXWT',
+          productSKU:  'sku_EzjFh7OMJC0s4H',
+          redirectURL: 'https://www.solidrubydesign.com'
+        }
+      }
+
+      var mode           = window.location.hostname == 'www.solidrubydesign.com' ? 'live' : 'test';
+      var checkoutButton = document.getElementById('checkout-button');
+      var stripe         = Stripe(settings[mode].stripeKey);
+
+      checkoutButton.addEventListener('click', function () {
+        stripe.redirectToCheckout({
+          locale: 'en',
+          items: [{ sku: settings[mode].productSKU, quantity: 1 }],
+
+          successUrl: `${settings[mode].redirectURL}/payment/success.html`,
+          cancelUrl:  `${settings[mode].redirectURL}/payment/canceled.html`,
+        })
+        .then(function (result) {
+          if (result.error) {
+            // browser or network error
+            var displayError = document.getElementById('payment-error-message');
+            displayError.textContent = result.error.message;
+          }
+        });
+      });
+    </script>
   </body>
 </html>

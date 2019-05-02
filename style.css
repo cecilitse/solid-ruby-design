@@ -31,6 +31,32 @@ h1 strong {
   background-color: #ffd1cd;
 }
 
+a {
+  color: #ef2229;
+}
+
+a:hover {
+  color: #c90c10;
+}
+
+.button.button-primary,
+.button.button-primary:visited {
+  background-color: #ef2229;
+  border-color: #ef2229;
+  border-radius: 0;
+}
+
+.button.button-primary:hover {
+  background-color: #c90c10;
+  border-color: #c90c10;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ******** COMPONENTS ******** */
+
 .banner {
   position: relative;
   margin-bottom: 30px /* Half the height of the .button-cta */
@@ -48,7 +74,6 @@ h1 strong {
 .banner .button-cta {
   height: 60px;
   margin: 0;
-  padding-top: 0.5em;
   border: none;
   border-radius: 0;
   font-size: 1.2em;
@@ -64,7 +89,14 @@ h1 strong {
   }
 }
 
-.payment-notice {
+#payment-error-message {
+  color: #cc0000;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.payment-container {
   padding-top: 0.8em;
   text-align: center;
 }
