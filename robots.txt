@@ -1,0 +1,4 @@
+Host: www.solidrubydesign.com
+
+User-agent: *
+Disallow: /payment/
