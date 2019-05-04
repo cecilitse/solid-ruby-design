@@ -1,7 +1,7 @@
 body {
   font-family: 'Roboto Mono', monospace;
   color: #4a4a4a;
-  border-top: 25px solid #ef2229;
+  border-top: 24px solid #ef2229;
   padding-bottom: 1em;
 }
 
@@ -14,10 +14,11 @@ h1 {
 }
 
 h1 .technologist-emoji {
-  width:  40px;
-  height: 40px;
+  width:  58px;
+  height: 58px;
+  margin-bottom: -15px;
   display: inline-block;
-  padding-right: 0.3em;
+  margin-right: 0.6em;
 
   background-image: url('images/technologist_emoji.png');
   background-size: cover;
