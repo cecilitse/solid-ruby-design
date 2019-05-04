@@ -135,6 +135,11 @@ pre > code {
   }
 }
 
+code a, code a:hover {
+  color: #cdf393;
+  text-decoration: none;
+}
+
 span.code-class { color: #fcd06e; }
 span.code-keyword { color: #c892eb; }
 span.code-method { color:#81aafc; }
