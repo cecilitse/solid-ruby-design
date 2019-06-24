@@ -72,7 +72,7 @@
           </div>
           <div class="payment-container">
             <p id="payment-error-message"><!-- Filled by Stripe Checkout script --></p>
-            <p class="payment-notice" data-price-message>One-shot payment of <span data-price>50</span>€</p>
+            <p class="payment-notice" data-price-message>One-shot payment of 50€</p>
             <p class="friend-message" data-friend-message></p>
           </div>
         </div>
@@ -85,12 +85,11 @@
         test: {
           stripeKey:   'pk_test_AQChgkHVYwyEZ7tQ6USRMMn700qcDhF3kr',
           products: {
-            classic: { sku: 'sku_EzjGIEQvq3lPMM', price: 99 },
+            classic: { sku: 'sku_EzjGIEQvq3lPMM' },
             lewagon: {
-              sku:          'sku_FHZh5DJtsfNxhK',
-              price:        50,
-              priceMessage: 'One-shot payment of <strike>99€</strike> <strong>50€</strong>',
-              message:      'Enjoy our Le Wagon family discount ❤️'
+              sku:           'sku_FHZh5DJtsfNxhK',
+              priceMessage:  'One-shot payment of <strike>99€</strike> <strong>50€</strong>',
+              friendMessage: 'Enjoy our Le Wagon family discount ❤️'
             }
           },
           redirectURL: window.location.origin
@@ -98,38 +97,34 @@
         live: {
           stripeKey:   'pk_live_LX30bNQfyM7kr7Mndz2AKIYv00RvtzsXWT',
           products: {
-            classic: { sku: 'sku_EzjFh7OMJC0s4H', price: 99 },
+            classic: { sku: 'sku_EzjFh7OMJC0s4H' },
             lewagon: {
-              sku:          'sku_FHZSVwZfvntbam',
-              price:        50,
-              priceMessage: 'One-shot payment of <strike>99€</strike> <strong>50€</strong>',
-              message:      'Enjoy our Le Wagon family discount ❤️'
+              sku:            'sku_FHZSVwZfvntbam',
+              priceMessage:   'One-shot payment of <strike>99€</strike> <strong>50€</strong>',
+              friendMessage:  'Enjoy our Le Wagon family discount ❤️'
             }
           },
           redirectURL: 'https://www.solidrubydesign.com'
         }
       }
 
-      const mode          = window.location.hostname == 'www.solidrubydesign.com' ? 'live' : 'test';
-      const mode_settings = settings[mode]
+      const mode         = window.location.hostname == 'www.solidrubydesign.com' ? 'live' : 'test';
+      const modeSettings = settings[mode];
 
-      var checkoutButton = document.getElementById('checkout-button');
-      var stripe         = Stripe(mode_settings.stripeKey);
+      const checkoutButton = document.getElementById('checkout-button');
+      const stripe         = Stripe(modeSettings.stripeKey);
 
       const urlParams    = new URLSearchParams(window.location.search);
 
       const couponSource = urlParams.get('coupon') || 'classic';
-      const product      = mode_settings.products[couponSource]
+      const product      = modeSettings.products[couponSource];
 
-      const priceSpan = document.querySelector('span[data-price]')
-      priceSpan.textContent = product.price
-
-      const friendMessage = document.querySelector('p[data-friend-message]')
-      const priceMessage = document.querySelector('p[data-price-message]')
+      const friendMessage = document.querySelector('p[data-friend-message]');
+      const priceMessage  = document.querySelector('p[data-price-message]');
 
       if (couponSource != 'classic') {
-        priceMessage.innerHTML = product.priceMessage
-        friendMessage.textContent = product.message
+        priceMessage.innerHTML    = product.priceMessage;
+        friendMessage.textContent = product.friendMessage;
       }
 
       checkoutButton.addEventListener('click', function () {
@@ -137,13 +132,13 @@
           locale: 'en',
           items: [{ sku: product.sku, quantity: 1 }],
 
-          successUrl: `${mode_settings.redirectURL}/payment/success.html`,
-          cancelUrl:  `${mode_settings.redirectURL}/payment/canceled.html`,
+          successUrl: `${modeSettings.redirectURL}/payment/success.html`,
+          cancelUrl:  `${modeSettings.redirectURL}/payment/canceled.html`,
         })
         .then(function (result) {
           if (result.error) {
             // browser or network error
-            var displayError = document.getElementById('payment-error-message');
+            const displayError = document.getElementById('payment-error-message');
             displayError.textContent = result.error.message;
           }
         });
