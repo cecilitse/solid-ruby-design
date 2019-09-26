@@ -102,6 +102,10 @@ a:hover {
   text-align: center;
 }
 
+.payment-notice {
+  margin-bottom: 0.3em;
+}
+
 /* ******** CODE FORMATING & SYNTAX COLORATION ******** */
 
 pre {

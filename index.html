@@ -72,7 +72,8 @@
           </div>
           <div class="payment-container">
             <p id="payment-error-message"><!-- Filled by Stripe Checkout script --></p>
-            <p class="payment-notice">One-shot payment of 50€</p>
+            <p class="payment-notice" data-price-message>One-shot payment of 50€</p>
+            <p class="friend-message" data-friend-message></p>
           </div>
         </div>
       </div>
@@ -83,32 +84,61 @@
       var settings = {
         test: {
           stripeKey:   'pk_test_AQChgkHVYwyEZ7tQ6USRMMn700qcDhF3kr',
-          productSKU:  'sku_EzjGIEQvq3lPMM',
+          products: {
+            classic: { sku: 'sku_EzjGIEQvq3lPMM' },
+            lewagon: {
+              sku:           'sku_FHZh5DJtsfNxhK',
+              priceMessage:  'One-shot payment of <strike>99€</strike> <strong>50€</strong>',
+              friendMessage: 'Enjoy our Le Wagon family discount ❤️'
+            }
+          },
           redirectURL: window.location.origin
         },
         live: {
           stripeKey:   'pk_live_LX30bNQfyM7kr7Mndz2AKIYv00RvtzsXWT',
-          productSKU:  'sku_EzjFh7OMJC0s4H',
+          products: {
+            classic: { sku: 'sku_EzjFh7OMJC0s4H' },
+            lewagon: {
+              sku:            'sku_FHZSVwZfvntbam',
+              priceMessage:   'One-shot payment of <strike>99€</strike> <strong>50€</strong>',
+              friendMessage:  'Enjoy our Le Wagon family discount ❤️'
+            }
+          },
           redirectURL: 'https://www.solidrubydesign.com'
         }
       }
 
-      var mode           = window.location.hostname == 'www.solidrubydesign.com' ? 'live' : 'test';
-      var checkoutButton = document.getElementById('checkout-button');
-      var stripe         = Stripe(settings[mode].stripeKey);
+      const mode         = window.location.hostname == 'www.solidrubydesign.com' ? 'live' : 'test';
+      const modeSettings = settings[mode];
+
+      const checkoutButton = document.getElementById('checkout-button');
+      const stripe         = Stripe(modeSettings.stripeKey);
+
+      const urlParams    = new URLSearchParams(window.location.search);
+
+      const couponSource = urlParams.get('coupon') || 'classic';
+      const product      = modeSettings.products[couponSource];
+
+      const friendMessage = document.querySelector('p[data-friend-message]');
+      const priceMessage  = document.querySelector('p[data-price-message]');
+
+      if (couponSource != 'classic') {
+        priceMessage.innerHTML    = product.priceMessage;
+        friendMessage.textContent = product.friendMessage;
+      }
 
       checkoutButton.addEventListener('click', function () {
         stripe.redirectToCheckout({
           locale: 'en',
-          items: [{ sku: settings[mode].productSKU, quantity: 1 }],
+          items: [{ sku: product.sku, quantity: 1 }],
 
-          successUrl: `${settings[mode].redirectURL}/payment/success.html`,
-          cancelUrl:  `${settings[mode].redirectURL}/payment/canceled.html`,
+          successUrl: `${modeSettings.redirectURL}/payment/success.html`,
+          cancelUrl:  `${modeSettings.redirectURL}/payment/canceled.html`,
         })
         .then(function (result) {
           if (result.error) {
             // browser or network error
-            var displayError = document.getElementById('payment-error-message');
+            const displayError = document.getElementById('payment-error-message');
             displayError.textContent = result.error.message;
           }
         });
